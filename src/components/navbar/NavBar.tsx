@@ -8,7 +8,6 @@ import { IoMdApps } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 type NavBarProps = {
-  // sidebar: boolean;
   setSideBar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

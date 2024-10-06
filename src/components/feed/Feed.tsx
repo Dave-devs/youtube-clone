@@ -9,7 +9,6 @@ import { truncateText } from "../../utils/truncate-text";
 
 type FeedProps = {
   category: number;
-  // setCategory: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const Feed = ({ category }: FeedProps) => {
