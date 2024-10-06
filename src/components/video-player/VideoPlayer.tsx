@@ -11,14 +11,11 @@ import { truncateText } from "../../utils/truncate-text";
 import { VideoData } from "../../@types/video-data";
 import { ChannelData } from "../../@types/channel";
 import { CommentItem } from "../../@types/commet";
+import { useParams } from "react-router-dom";
 
 
-type VideoPlayerProps = {
-    videoId: string;
-}
-
-
-const VideoPlayer = ({ videoId }: VideoPlayerProps) => {
+const VideoPlayer = () => {
+    const {videoId} = useParams();
     const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
 
     // Video Fetch Request

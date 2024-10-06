@@ -36,7 +36,7 @@ const NavBar = ({ setSideBar }: NavBarProps) => {
         <RiVideoAddFill color="red" className="icon" />
         <IoMdApps className="icon" />
         <IoMdNotifications className="icon" />
-        <img src={images.profileImg} className="user-icon icon" alt="" />
+        <img src={images.profileImg} className="user-icon" alt="" />
       </div>
     </nav>
   );

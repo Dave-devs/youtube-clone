@@ -62,3 +62,10 @@
     width: 50%;
     margin-bottom: 25px;
 }
+
+/* Responsiveness */
+@media (max-width: 900px) {
+    .sidebar {
+        display: none;
+    }
+}

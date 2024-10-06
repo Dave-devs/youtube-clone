@@ -47,3 +47,24 @@ nav {
     height: 30px;
     border-radius: 50%;
 }
+
+/* Responsiveness */
+@media (max-width: 900px) {
+    .menu-icon {
+        display: none;
+    }
+    .nav-right .icon {
+        display: none;
+    }
+    .nav-right .user-icon {
+        display: block;
+        width: 20px;
+        height: 20px;
+    }
+    .nav-left .logo {
+        width: 90px;
+    }
+    .nav-middle .search-box input {
+        width: 100px;
+    }
+}
