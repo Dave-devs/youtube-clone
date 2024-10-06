@@ -60,14 +60,14 @@ export interface Root {
   etag: string;
   nextPageToken: string;
   pageInfo: PageInfo;
-  items: CommentData[];
+  items: CommentItem[];
 }
 
-export interface CommentData {
+export interface CommentItem {
   kind: string;
   etag: string;
   id: string;
-  itemSnippet: ItemSnippet;
+  snippet: ItemSnippet;
 }
 
 export interface ItemSnippet {
@@ -83,7 +83,7 @@ export interface TopLevelComment {
   kind: string;
   etag: string;
   id: string;
-  topLevelCommentSnippet: TopLevelCommentSnippet;
+  snippet: TopLevelCommentSnippet;
 }
 
 export interface TopLevelCommentSnippet {

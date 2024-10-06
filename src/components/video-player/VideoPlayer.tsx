@@ -10,7 +10,7 @@ import moment from "moment";
 import { truncateText } from "../../utils/truncate-text";
 import { VideoData } from "../../@types/video-data";
 import { ChannelData } from "../../@types/channel";
-import { CommentData } from "../../@types/commet";
+import { CommentItem } from "../../@types/commet";
 
 
 type VideoPlayerProps = {
@@ -39,14 +39,12 @@ const VideoPlayer = ({ videoId }: VideoPlayerProps) => {
     });
 
     // Comment Fetch Request
-    const commentUrl = data ?
-        `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=50&videoId=${videoId}&key=${apiKey}`
-        : null;
+    const commentUrl = `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=50&videoId=${videoId}&key=${apiKey}`
     const { data: commentData, isLoading: isLoadingCommentData, error: errorCommentData } = useQuery({
         queryKey: ["comments", videoId, data, channelData],
         queryFn: () => axios.get(commentUrl!).then((res) => res.data),
-        enabled: !!data,
     });
+
 
     if (isLoading || isLoadingChannelData || isLoadingCommentData) {
         return <p>Loading...</p>;
@@ -96,24 +94,37 @@ const VideoPlayer = ({ videoId }: VideoPlayerProps) => {
                 <p>{truncateText(data.snippet.description, 250)}</p>
                 <hr />
                 <h4>{valueConverter(data.statistics.commentCount)} Comments</h4>
-                {commentData.items.map((item: CommentData, index: number) => {
+                {commentData?.items?.map((item: CommentItem, index: number) => {
+                    // Access the correct path for the snippet
+                    const itemSnippet = item?.snippet;
+                    const topLevelComment = itemSnippet?.topLevelComment;
+                    const topLevelSnippet = topLevelComment?.snippet;
+
+                    if (!topLevelSnippet) {
+                        return <p key={index}>Invalid Comment Data</p>;
+                    }
+                    // Render the comment if data exists
                     return (
                         <div key={index} className="comment">
-                            <img src={item?.itemSnippet?.topLevelComment?.topLevelCommentSnippet?.authorProfileImageUrl} alt="" />
+                            <img
+                                src={topLevelSnippet?.authorProfileImageUrl || ""}
+                                alt={topLevelSnippet?.authorDisplayName || "Author"}
+                            />
                             <div>
-                                <h3>{item?.itemSnippet?.topLevelComment?.topLevelCommentSnippet?.authorDisplayName}
-                                    <span>{moment(item?.itemSnippet?.topLevelComment?.topLevelCommentSnippet?.publishedAt).fromNow()}</span>
+                                <h3>
+                                    {topLevelSnippet?.authorDisplayName || "Anonymous"}
+                                    <span>{moment(topLevelSnippet?.publishedAt).fromNow()}</span>
                                 </h3>
-                                <p>{truncateText(item?.itemSnippet?.topLevelComment?.topLevelCommentSnippet?.textDisplay, 100)}</p>
+                                <p>{truncateText(topLevelSnippet?.textDisplay, 100)}</p>
                                 <div className="comment-action">
                                     <BiSolidLike className="icon" />
-                                    <span>{valueConverter(JSON.stringify(item?.itemSnippet?.topLevelComment?.topLevelCommentSnippet?.likeCount))}</span>
+                                    <span>{valueConverter(topLevelSnippet?.likeCount || "0")}</span>
                                     <BiSolidDislike className="icon" />
                                     <span>10</span>
                                 </div>
                             </div>
                         </div>
-                    )
+                    );
                 })}
             </div>
 
